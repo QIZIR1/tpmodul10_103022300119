@@ -1,19 +1,26 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using tpmodul10_103022300119.Models;
 using System.Collections.Generic;
 using tpmodul10_103022300119.Models;
 
 namespace tpmodul10_103022300119.Control
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class MahasiswaController : ControllerBase
     {
         private static List<Mahasiswa> mahasiswaList = new List<Mahasiswa>
         {
-            new Mahasiswa { Nama = "Nama Kamu", Nim = "1302000001" },
-            new Mahasiswa { Nama = "Stephen Curry", Nim = "1302000002" }
+            new Mahasiswa { Nama = "Riziq Rizwan", Nim = "103022300119" },
+            new Mahasiswa { Nama = "Frizam Dafa Maulana", Nim = "103022300011" },
+            new Mahasiswa { Nama = "Naufal Muhammad Dzulfikar", Nim = "103022300021" },
+            new Mahasiswa { Nama = "Bagas Pratama", Nim = "103022300035" },
+            new Mahasiswa { Nama = "Raffa Rizky Febryan", Nim = "103022330138" }
+         
         };
 
         [HttpGet]
-        public ActionResult<IEnumerable<Mahasiswa>> GetAll()
+        public IEnumerable<Mahasiswa> Get()
         {
             return mahasiswaList;
         }
@@ -27,20 +34,20 @@ namespace tpmodul10_103022300119.Control
         }
 
         [HttpPost]
-        public ActionResult AddMahasiswa([FromBody] Mahasiswa mahasiswa)
+        public ActionResult Post([FromBody] Mahasiswa mahasiswa)
         {
             mahasiswaList.Add(mahasiswa);
-            return Ok();
+            return CreatedAtAction(nameof(Get), new {index = mahasiswaList.Count - 1 }, mahasiswa);
         }
 
         [HttpDelete("{index}")]
-        public ActionResult DeleteMahasiswa(int index)
+        public IActionResult DeleteMahasiswa(int index)
         {
             if (index < 0 || index >= mahasiswaList.Count)
                 return NotFound();
 
             mahasiswaList.RemoveAt(index);
-            return Ok();
+            return NoContent();
         }
     }
 }
